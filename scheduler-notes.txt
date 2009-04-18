@@ -1,0 +1,39 @@
+---- Benchmarks:
+
+ * LMBench : http://www.bitmover.com/lmbench/
+   * cool little benchmarking suite.
+ * LBS : http://lbs.sourceforge.net/
+ * TLDP Page on the subject : http://tldp.org/HOWTO/Benchmarking-HOWTO.html
+
+---- Schedulers:
+ * Archive of staircase Deadline scheduler (SD/RSDL) never integrated to mainline, superceded by CFS:
+   * http://linux-dev.qc.ec.gc.ca/archives/SD_archives.htm
+ * Distributed Weighted Round-Robin
+   * http://happyli.org/tongli/papers/dwrr.pdf
+ * Earliest Deadline First Scheduler
+   * http://www.cse.ucsc.edu/~lcx/research/one-shot.pdf
+   * http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=00842329
+
+
+Random stuff that's relevant:
+ * IBM article on the scheduler
+   http://www.ibm.com/developerworks/linux/library/l-scheduler/
+ * CFS vs. RSDL
+   http://www.ibm.com/developerworks/linux/library/l-cfs/
+ * Apparent list of I/O schedulers available:
+   * cfq
+   * noop
+   * deadline
+   * anticipatory
+ * Nice overview of the old scheduler
+   * http://209.85.173.132/search?q=cache:ZySSUT24HDoJ:www.cs.gsu.edu/~cscbecx/CSC4320_6320%2520projects/Linux%2520Scheduling.ppt&cd=4&hl=en&ct=clnk&gl=us
+ * List of schedulers for LVS, very high level:
+   * http://www.linuxvirtualserver.org/docs/scheduling.html
+ * Page w/ list of schedulers:
+   * http://widefox.pbwiki.com/Scheduler
+* wikipedia not half bad
+  * http://en.wikipedia.org/wiki/Scheduling_(computing)
+
+
+
+
