@@ -31,8 +31,10 @@ Random stuff that's relevant:
    * http://www.linuxvirtualserver.org/docs/scheduling.html
  * Page w/ list of schedulers:
    * http://widefox.pbwiki.com/Scheduler
-* wikipedia not half bad
+ * wikipedia not half bad
   * http://en.wikipedia.org/wiki/Scheduling_(computing)
+ * Genetic Linux (looks like what Nat originally wanted to do):
+  * http://apcmag.com/inside_the_selftuning_genetic_linux.htm
 
 
 
