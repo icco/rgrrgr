@@ -13,9 +13,11 @@
  * Earliest Deadline First Scheduler
    * http://www.cse.ucsc.edu/~lcx/research/one-shot.pdf
    * http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=00842329
+ * PDF w/ high-level overview of different algorithms:
+   * www.student.cs.uwaterloo.ca/~cs350/F06/slides/cs350_F.pd
 
 
-Random stuff that's relevant:
+---- Random stuff that's relevant:
  * IBM article on the scheduler
    http://www.ibm.com/developerworks/linux/library/l-scheduler/
  * CFS vs. RSDL
