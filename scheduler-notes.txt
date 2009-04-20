@@ -15,8 +15,8 @@
    * http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=00842329
  * PDF w/ high-level overview of different algorithms:
    * www.student.cs.uwaterloo.ca/~cs350/F06/slides/cs350_F.pd
- * Why Linux has no pluggable scheduler:
-   * http://kerneltrap.org/Linux/Pluggable_Schedulers_vs_Pluggable_Security
+ * Suplus Fair Scheduling, a proportional-share CPU scheduler:
+   * citeseer.ist.psu.edu/chandra00surplus.htm
 
 
 ---- Random stuff that's relevant:
@@ -39,6 +39,8 @@
   * http://en.wikipedia.org/wiki/Scheduling_(computing)
  * Genetic Linux (looks like what Nat originally wanted to do):
   * http://apcmag.com/inside_the_selftuning_genetic_linux.htm
+ * Why Linux has no pluggable scheduler:
+   * http://kerneltrap.org/Linux/Pluggable_Schedulers_vs_Pluggable_Security
 
 
 
