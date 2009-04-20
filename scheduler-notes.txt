@@ -19,6 +19,8 @@
    * citeseer.ist.psu.edu/chandra00surplus.htm
  * Rate-monotonic scheduling on Wikipedia:
    * http://en.wikipedia.org/wiki/Rate-monotonic_scheduling
+ * Summary of "Really Fair Scheduler":
+   * http://kerneltrap.org/Linux/The_Really_Fair_Scheduler
 
 
 ---- Random stuff that's relevant:
