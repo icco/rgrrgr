@@ -30,8 +30,6 @@
    * http://www.ibm.com/developerworks/linux/library/l-cfs/
  * Nice overview of the old scheduler
    * http://209.85.173.132/search?q=cache:ZySSUT24HDoJ:www.cs.gsu.edu/~cscbecx/CSC4320_6320%2520projects/Linux%2520Scheduling.ppt&cd=4&hl=en&ct=clnk&gl=us
- * List of schedulers for LVS, very high level:
-   * http://www.linuxvirtualserver.org/docs/scheduling.html
  * Page w/ list of schedulers:
    * http://widefox.pbwiki.com/Scheduler
  * wikipedia not half bad
