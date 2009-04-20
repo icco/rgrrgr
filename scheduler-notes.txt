@@ -14,7 +14,7 @@
    * http://www.cse.ucsc.edu/~lcx/research/one-shot.pdf
    * http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=00842329
  * PDF w/ high-level overview of different algorithms:
-   * www.student.cs.uwaterloo.ca/~cs350/F06/slides/cs350_F.pd
+   * www.student.cs.uwaterloo.ca/~cs350/F06/slides/cs350_F.pdf
  * Suplus Fair Scheduling, a proportional-share CPU scheduler:
    * citeseer.ist.psu.edu/chandra00surplus.htm
  * Rate-monotonic scheduling on Wikipedia:
