@@ -25,14 +25,9 @@
 
 ---- Random stuff that's relevant:
  * IBM article on the scheduler
-   http://www.ibm.com/developerworks/linux/library/l-scheduler/
+   * http://www.ibm.com/developerworks/linux/library/l-scheduler/
  * CFS vs. RSDL
-   http://www.ibm.com/developerworks/linux/library/l-cfs/
- * Apparent list of I/O schedulers available:
-   * cfq
-   * noop
-   * deadline
-   * anticipatory
+   * http://www.ibm.com/developerworks/linux/library/l-cfs/
  * Nice overview of the old scheduler
    * http://209.85.173.132/search?q=cache:ZySSUT24HDoJ:www.cs.gsu.edu/~cscbecx/CSC4320_6320%2520projects/Linux%2520Scheduling.ppt&cd=4&hl=en&ct=clnk&gl=us
  * List of schedulers for LVS, very high level:
