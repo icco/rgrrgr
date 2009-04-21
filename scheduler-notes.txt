@@ -16,7 +16,7 @@
  * PDF w/ high-level overview of different algorithms:
    * www.student.cs.uwaterloo.ca/~cs350/F06/slides/cs350_F.pdf
  * Suplus Fair Scheduling, a proportional-share CPU scheduler:
-   * citeseer.ist.psu.edu/chandra00surplus.htm
+   * citeseer.ist.psu.edu/chandra00surplus.html
  * Rate-monotonic scheduling on Wikipedia:
    * http://en.wikipedia.org/wiki/Rate-monotonic_scheduling
  * Summary of "Really Fair Scheduler":
