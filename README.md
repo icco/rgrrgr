@@ -16,5 +16,5 @@ Our team consists of:
 
  * William Tracy <wtracy@calpoly.edu>
  * Nat Welch <nat@natwelch.com>
- * Alex?
+ * Alex Chernetz andy80586@gmail.com
 
