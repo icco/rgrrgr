@@ -34,7 +34,7 @@ $ su
 Build the kernel inside the chroot environment per the instructions at hanez.org. 
 
 Outside the chroot and as a normal user, launch your new kernel via:
-./etch/root/linux-2.6.22/vmlinux udba=path/to/rootfs/image mem=128M
+./etch/root/linux-2.6.22/vmlinux ubda=path/to/rootfs/image mem=128M
 
 Nat: If you have time to kill, look into backporting changes to 
 arch/um/sys-i386/user-offsets.c 
