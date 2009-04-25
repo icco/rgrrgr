@@ -12,13 +12,13 @@ http://uml.nagafix.co.uk/filesystems/
 The instructions here are very useful:
 http://hanez.org/howto-user-mode-linux.html
 
-However, we have decided to target the 2.6.22 kernel, which poses some problems. Several library changes in recent distributions break the UML-specific code in this kernel (more recent kernels seem to build normally UML normally, and normal kernels can be built from 2.6.22 with no problem). I am specifically experiencing these problems on Debian Lenny; I will test on Ubuntu soon.
+However, we have decided to target the 2.6.22 kernel, which poses some problems. Several library changes in recent distributions break the UML-specific code in this kernel (more recent kernels seem to build normally UML normally, and normal kernels can be built from 2.6.22 with no problem). I experience these problems on Debian Lenny and Ubuntu Intrepid.
 
 The errors I see are very similar to the ones listed here:
 http://www.mail-archive.com/debian-user@lists.debian.org/msg529182.html
 
 The error
-arch/um/sys-i386/user-offsets.c:4:22: error: asm/user.h: No such file or directory
+arch/um/sys-i386/user-offsets.c:7:22: error: asm/user.h: No such file or directory
 can be resolved by creating a symlink between sys/user.h and asm/user.h. I do not have a fix for the struct errors when building on Lenny. Possibly using an older version of GCC would help.
 
 The linked discussion referenced being able to build successfully under Etch, so I took the following approach. I created a chroot environment containing a Debian Etch install:
