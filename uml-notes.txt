@@ -1,0 +1,41 @@
+The following are my notes on creating and running a user-mode-linux 2.6.22 kernel.
+
+The two components needed to run UML are the kernel and an image needed to use as the root filesystem. I will address the filesystem first.
+
+=== The Filesystem Image ===
+If you are on Debian, there exists a promising tool called rootstrap that supposedly will create an image for you. However, as part of the setup process, it needs to download packages over the network. I am unable to get networking to function in UML, so this did not work for me.
+
+Instead, you can download an image for the distribution of your choice from here:
+http://uml.nagafix.co.uk/filesystems/
+
+=== Building the Kernel ===
+The instructions here are very useful:
+http://hanez.org/howto-user-mode-linux.html
+
+However, we have decided to target the 2.6.22 kernel, which poses some problems. Several library changes in recent distributions break the UML-specific code in this kernel (more recent kernels seem to build normally UML normally, and normal kernels can be built from 2.6.22 with no problem). I experience these problems on Debian Lenny and Ubuntu Intrepid.
+
+The errors I see are very similar to the ones listed here:
+http://www.mail-archive.com/debian-user@lists.debian.org/msg529182.html
+
+The error
+arch/um/sys-i386/user-offsets.c:7:22: error: asm/user.h: No such file or directory
+can be resolved by creating a symlink between sys/user.h and asm/user.h. I do not have a fix for the struct errors when building on Lenny. Possibly using an older version of GCC would help.
+
+The linked discussion referenced being able to build successfully under Etch, so I took the following approach. I created a chroot environment containing a Debian Etch install:
+
+$ su
+# aptitude install debootstrap
+# debootstrap etch ./etch http://ftp.debian.org # or your mirror of choice
+# chroot ./etch # you are now inside the chroot environment, effectively running Etch
+# cd ~
+# aptitude install build-essential libncurses5-dev zlib1g-dev
+# wget http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.22.tar.bz2
+
+Build the kernel inside the chroot environment per the instructions at hanez.org. 
+
+Outside the chroot and as a normal user, launch your new kernel via:
+./etch/root/linux-2.6.22/vmlinux ubda=path/to/rootfs/image mem=128M
+
+Nat: If you have time to kill, look into backporting changes to 
+arch/um/sys-i386/user-offsets.c 
+so we can build without going through these contortions.
