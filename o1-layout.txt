@@ -167,3 +167,5 @@ More specifically, I propose we include (somewhere in sched.c) the block:
 #ifdef CONFIG_SCHED_SMT
 #error "The rgrrgr scheduler does not support hyperthreading."
 #endif
+
+We might consider not supporting CONFIG_PREEMPT, either.
