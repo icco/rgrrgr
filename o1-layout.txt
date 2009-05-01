@@ -158,9 +158,12 @@ extern void normalize_rt_tasks(void);
 
 
 
-As an aside, I vote that we do *not* support SMP in our scheduler, given our time constraints. With that in mind, I left out of the list several functions that are defined as no-ops if the macro SMP is undefined. In that case, several additional functions that are included in the above list will likely turn into one-liners or even empty functions.
+As an aside, I vote that we do *not* support SMP or hyperthreading in our scheduler, given our time constraints. With that in mind, I left out of the list several functions that are defined as no-ops if the macro SMP is undefined. In that case, several additional functions that are included in the above list will likely turn into one-liners or even empty functions.
 
 More specifically, I propose we include (somewhere in sched.c) the block:
 #ifdef CONFIG_SMP
 #error "The rgrrgr scheduler does not support SMP."
+#endif
+#ifdef CONFIG_SCHED_SMT
+#error "The rgrrgr scheduler does not support hyperthreading."
 #endif
