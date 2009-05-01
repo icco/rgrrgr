@@ -2,9 +2,9 @@ The O(1) scheduler seems to be pretty well contained in
 include/linux/sched.h
 kernel/sched.c
 
-The following is a tentative list of functions we need to implement (functions that are exported to the rest of the kernel, and not just used internally). I may have missed a few, and I may have included some that didn't belong in the first place.
+The following is a tentative list of functions we need to implement (functions that are exported to the rest of the kernel, and not just used internally). I may have missed a few, and I may have included some that didn't belong in the first place. Actually, I think there are probably quite a few that don't belong in this list. >_<
 
-I know it's a long list.
+So, yeah, I know it's a long list.
 
 extern int nr_processes(void);
 extern unsigned long nr_running(void);
