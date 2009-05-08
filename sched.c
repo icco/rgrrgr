@@ -58,9 +58,6 @@
 #error "rgrrgr does not support SMP"
 #endif
 
-#ifdef CONFIG_SCHED_SMT
-#error "rgrrgr does not support hyperthreading"
-#endif
 
 #ifdef CONFIG_PREEMPT
 #error "rgrrgr does not support kernel-space process preemption"
@@ -73,6 +70,7 @@
 #ifdef CONFIG_MAGIC_SYSRQ
 #error "rgrrgr does not support magic SYSRQ's"
 #endif
+
 
 /*
  * These are the runqueue data structures:
@@ -88,75 +86,6 @@ struct prio_array {
 	struct list_head queue[MAX_PRIO];
 };
 
-/*
- * This is the main, per-CPU runqueue data structure.
- *
- * Locking rule: those places that want to lock multiple runqueues
- * (such as the load balancing or the thread migration code), lock
- * acquire operations must be ordered by ascending &runqueue.
- */
-struct runqueue {
-	spinlock_t lock;
-
-	/*
-	 * nr_running and cpu_load should be in the same cacheline because
-	 * remote CPUs use both these fields when doing load calculation.
-	 */
-	unsigned long nr_running;
-#ifdef CONFIG_SMP
-	unsigned long cpu_load[3];
-#endif
-	unsigned long long nr_switches;
-
-	/*
-	 * This is part of a global counter where only the total sum
-	 * over all CPUs matters. A task can increase this counter on
-	 * one CPU and if it got migrated afterwards it may decrease
-	 * it on another CPU. Always updated under the runqueue lock:
-	 */
-	unsigned long nr_uninterruptible;
-
-	unsigned long expired_timestamp;
-	unsigned long long timestamp_last_tick;
-	task_t *curr, *idle;
-	struct mm_struct *prev_mm;
-	prio_array_t *active, *expired, arrays[2];
-	int best_expired_prio;
-	atomic_t nr_iowait;
-
-#ifdef CONFIG_SMP
-	struct sched_domain *sd;
-
-	/* For active balancing */
-	int active_balance;
-	int push_cpu;
-
-	task_t *migration_thread;
-	struct list_head migration_queue;
-	int cpu;
-#endif
-
-#ifdef CONFIG_SCHEDSTATS
-	/* latency stats */
-	struct sched_info rq_sched_info;
-
-	/* sys_sched_yield() stats */
-	unsigned long yld_exp_empty;
-	unsigned long yld_act_empty;
-	unsigned long yld_both_empty;
-	unsigned long yld_cnt;
-
-	/* schedule() stats */
-	unsigned long sched_switch;
-	unsigned long sched_cnt;
-	unsigned long sched_goidle;
-
-	/* try_to_wake_up() stats */
-	unsigned long ttwu_cnt;
-	unsigned long ttwu_local;
-#endif
-};
-
 
 
 
@@ -164,8 +93,9 @@ struct runqueue {
  * task_curr - is this task currently executing on a CPU?
  * @p: the task in question.
  */
-inline int task_curr(const task_t *p)
+inline int task_curr(const struct task_struct *p)
 {
+/* implement me! */
 }
 
 #ifdef CONFIG_SMP
@@ -180,6 +110,7 @@ inline int task_curr(const task_t *p)
 */
 void wait_task_inactive(struct task_struct *p)
 {
+/* implement me to support SMP! */
 }
 #endif
 
@@ -199,26 +130,29 @@ void wait_task_inactive(struct task_struct *p)
 */
 void kick_process(struct task_struct *p)
 {
+/* implement me to support SMP! */
 }
 #endif
 
 
-int fastcall wake_up_process(task_t *p)
+int fastcall wake_up_process(struct task_struct *p)
 {
+/* implement me! */
 }
-
 EXPORT_SYMBOL(wake_up_process);
 
-int fastcall wake_up_state(task_t *p, unsigned int state)
+int fastcall wake_up_state(struct task_struct *p, unsigned int state)
 {
+/* implement me! */
 }
 
 /*
  * Perform scheduler related setup for a newly forked process p.
  * p is forked by current.
  */
-void fastcall sched_fork(task_t *p, int clone_flags)
+void fastcall sched_fork(struct task_struct *p, int clone_flags)
 {
+/* implement me! */
 }
 
 /*
@@ -228,8 +162,9 @@ void fastcall sched_fork(task_t *p, int clone_flags)
  * that must be done for every newly created context, then puts the task
  * on the runqueue and wakes it.
  */
-void fastcall wake_up_new_task(task_t *p, unsigned long clone_flags)
+void fastcall wake_up_new_task(struct task_struct *p, unsigned long clone_flags)
 {
+/* implement me! */
 }
 
 /*
@@ -241,8 +176,9 @@ void fastcall wake_up_new_task(task_t *p, unsigned long clone_flags)
  * artificially, because any timeslice recovered here
  * was given away by the parent in the first place.)
  */
-void fastcall sched_exit(task_t *p)
+void fastcall sched_exit(struct task_struct *p)
 {
+/* implement me! */
 }
 
 /**
@@ -252,18 +188,9 @@ void fastcall sched_exit(task_t *p)
 asmlinkage void schedule_tail(struct task_struct *prev)
         __releases(rq->lock)
 {
+/* implement me! */
 }
 
-
-/*
- * double_lock_balance - lock the busiest runqueue, this_rq is locked already.
- */
-/*static void double_lock_balance(struct rq *this_rq, struct rq *busiest)
-        __releases(this_rq->lock)
-        __acquires(busiest->lock)
-        __acquires(this_rq->lock)
-{
-}*/
 
 #ifdef CONFIG_SMP
 /*
@@ -272,6 +199,7 @@ asmlinkage void schedule_tail(struct task_struct *prev)
 */
 void sched_exec(void)
 {
+/* implement me to support SMP! */
 }
 #endif
 
@@ -285,31 +213,45 @@ void sched_exec(void)
  */
 unsigned long nr_running(void)
 {
+/* implement me! */
 }
 
 unsigned long nr_uninterruptible(void)
 {
+/* implement me! */
 }
 
 unsigned long long nr_context_switches(void)
 {
+/* implement me! */
 }
 
 unsigned long nr_iowait(void)
 {
+/* implement me! */
+}
+
+unsigned long nr_active(void)
+{
+/* implement me! */
 }
 
 #ifdef CONFIG_SMP
-/* blablabla */
+/*
+* idle_balance is called by schedule() if this_cpu is about to become
+* idle. Attempts to pull tasks from other CPUs.
+*/
+static void idle_balance(int this_cpu, struct rq *this_rq)
+{
+/* put stuff here if you want to support SMP */
+}
 #else
 /*
  * on UP we do not need to balance between CPUs:
  */
-static inline void rebalance_tick(int cpu, runqueue_t *rq, enum idle_type idle)
+static inline void idle_balance(int cpu, struct rq *rq)
 {
-}
-static inline void idle_balance(int cpu, runqueue_t *rq)
-{
+/* deliberately empty */
 }
 #endif
 
@@ -323,8 +265,9 @@ EXPORT_PER_CPU_SYMBOL(kstat);
  * Return current->sched_time plus any more ns on the sched_clock
  * that have not yet been banked.
  */
-unsigned long long current_sched_time(const task_t *tsk)
+unsigned long long current_sched_time(const struct task_struct *p)
 {
+/* implement me! */
 }
 
 /*
@@ -335,6 +278,7 @@ unsigned long long current_sched_time(const task_t *tsk)
 */
 void account_user_time(struct task_struct *p, cputime_t cputime)
 {
+/* implement me! */
 }
 
 /*
@@ -346,6 +290,7 @@ void account_user_time(struct task_struct *p, cputime_t cputime)
 void account_system_time(struct task_struct *p, int hardirq_offset,
                          cputime_t cputime)
 {
+/* implement me! */
 }
 
 /*
@@ -355,6 +300,7 @@ void account_system_time(struct task_struct *p, int hardirq_offset,
 */
 void account_steal_time(struct task_struct *p, cputime_t steal)
 {
+/* implement me! */
 }
 
 
@@ -367,26 +313,15 @@ void account_steal_time(struct task_struct *p, cputime_t steal)
  */
 void scheduler_tick(void)
 {
+/* implement me! */
 }
-
-#ifdef CONFIG_SCHED_SMT
-/* blablabla */
-#else
-static inline void wake_sleeping_dependent(int this_cpu, runqueue_t *this_rq)
-{
-}
-
-static inline int dependent_sleeper(int this_cpu, runqueue_t *this_rq)
-{
-	return 0;
-}
-#endif
 
 /*
  * schedule() is the main scheduler function.
  */
 asmlinkage void __sched schedule(void)
 {
+/* implement me! */
 }
 
 #ifdef CONFIG_PREEMPT
@@ -397,6 +332,7 @@ asmlinkage void __sched schedule(void)
  */
 asmlinkage void __sched preempt_schedule(void)
 {
+/* implement me to support in-kernel preemption! */
 }
 EXPORT_SYMBOL(preempt_schedule);
 
@@ -408,12 +344,14 @@ EXPORT_SYMBOL(preempt_schedule);
 */
 asmlinkage void __sched preempt_schedule_irq(void)
 {
+/* implement me to support in-kernel preemption! */
 }
 
 #endif /* CONFIG_PREEMPT */
 
 int default_wake_function(wait_queue_t *curr, unsigned mode, int sync, void *key)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(default_wake_function);
 
@@ -427,6 +365,7 @@ EXPORT_SYMBOL(default_wake_function);
 void fastcall __wake_up(wait_queue_head_t *q, unsigned int mode,
                         int nr_exclusive, void *key)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(__wake_up);
 
@@ -435,66 +374,96 @@ EXPORT_SYMBOL(__wake_up);
 */
 void fastcall __wake_up_locked(wait_queue_head_t *q, unsigned int mode)
 {
+/* implement me! */
 }
 
 void fastcall
 __wake_up_sync(wait_queue_head_t *q, unsigned int mode, int nr_exclusive)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL_GPL(__wake_up_sync);      /* For internal use only */
 
 void fastcall complete(struct completion *x)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(complete);
 
 void fastcall complete_all(struct completion *x)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(complete_all);
 
 void fastcall __sched wait_for_completion(struct completion *x)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(wait_for_completion);
 
 unsigned long fastcall __sched wait_for_completion_timeout(struct completion *x, unsigned long timeout)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(wait_for_completion_timeout);
 
 int fastcall __sched wait_for_completion_interruptible(struct completion *x)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(wait_for_completion_interruptible);
 
 unsigned long fastcall __sched wait_for_completion_interruptible_timeout(struct completion *x, unsigned long timeout)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(wait_for_completion_interruptible_timeout);
 
 void fastcall __sched interruptible_sleep_on(wait_queue_head_t *q)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(interruptible_sleep_on);
 
 long fastcall __sched interruptible_sleep_on_timeout(wait_queue_head_t *q, long timeout)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(interruptible_sleep_on_timeout);
 
+#ifdef CONFIG_RT_MUTEXES
+/*
+* rt_mutex_setprio - set the current priority of a task
+* @p: task
+* @prio: prio value (kernel-internal form)
+*
+* This function changes the 'effective' priority of a task. It does
+* not touch ->normal_prio like __setscheduler().
+*
+* Used by the rt_mutex code to implement priority inheritance logic.
+*/
+void rt_mutex_setprio(struct task_struct *p, int prio)
+{
+/* implement me! */
+}
+#endif
+
 void fastcall __sched sleep_on(wait_queue_head_t *q)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(sleep_on);
 
 long fastcall __sched sleep_on_timeout(wait_queue_head_t *q, long timeout)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL(sleep_on_timeout);
 
-void set_user_nice(task_t *p, long nice)
+void set_user_nice(struct task_struct *p, long nice)
 {
+/* implement me! */
 }
 
 EXPORT_SYMBOL(set_user_nice);
@@ -504,8 +473,9 @@ EXPORT_SYMBOL(set_user_nice);
  * @p: task
  * @nice: nice value
  */
-int can_nice(const task_t *p, const int nice)
+int can_nice(const struct task_struct *p, const int nice)
 {
+/* implement me! */
 }
 
 #ifdef __ARCH_WANT_SYS_NICE
@@ -519,6 +489,7 @@ int can_nice(const task_t *p, const int nice)
  */
 asmlinkage long sys_nice(int increment)
 {
+/* implement me! */
 }
 
 #endif
@@ -531,16 +502,18 @@ asmlinkage long sys_nice(int increment)
  * RT tasks are offset by -200. Normal tasks are centered
  * around 0, value goes from -16 to +15.
  */
-int task_prio(const task_t *p)
+int task_prio(const struct task_struct *p)
 {
+/* implement me! */
 }
 
 /**
  * task_nice - return the nice value of a given task.
  * @p: the task in question.
  */
-int task_nice(const task_t *p)
+int task_nice(const struct task_struct *p)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL_GPL(task_nice);
 
@@ -550,14 +523,16 @@ EXPORT_SYMBOL_GPL(task_nice);
  */
 int idle_cpu(int cpu)
 {
+/* implement me! */
 }
 
 /**
  * idle_task - return the idle task for a given cpu.
  * @cpu: the processor in question.
  */
-task_t *idle_task(int cpu)
+struct task_struct *idle_task(int cpu)
 {
+/* implement me! */
 }
 
 
@@ -572,13 +547,9 @@ task_t *idle_task(int cpu)
 int sched_setscheduler(struct task_struct *p, int policy,
 		       struct sched_param *param)
 {
+/* implement me! */
 }
 EXPORT_SYMBOL_GPL(sched_setscheduler);
-
-/*static int
-do_sched_setscheduler(pid_t pid, int policy, struct sched_param __user *param)
-{
-}*/
 
 /**
  * sys_sched_setscheduler - set/change the scheduler policy and RT priority
@@ -589,6 +560,7 @@ do_sched_setscheduler(pid_t pid, int policy, struct sched_param __user *param)
 asmlinkage long sys_sched_setscheduler(pid_t pid, int policy,
 				       struct sched_param __user *param)
 {
+/* implement me! */
 }
 
 /**
@@ -598,6 +570,7 @@ asmlinkage long sys_sched_setscheduler(pid_t pid, int policy,
  */
 asmlinkage long sys_sched_setparam(pid_t pid, struct sched_param __user *param)
 {
+/* implement me! */
 }
 
 /**
@@ -606,6 +579,7 @@ asmlinkage long sys_sched_setparam(pid_t pid, struct sched_param __user *param)
  */
 asmlinkage long sys_sched_getscheduler(pid_t pid)
 {
+/* implement me! */
 }
 
 /**
@@ -615,16 +589,13 @@ asmlinkage long sys_sched_getscheduler(pid_t pid)
  */
 asmlinkage long sys_sched_getparam(pid_t pid, struct sched_param __user *param)
 {
+/* implement me! */
 }
 
 long sched_setaffinity(pid_t pid, cpumask_t new_mask)
 {
+/* implement me! */
 }
-
-/*static int get_user_cpu_mask(unsigned long __user *user_mask_ptr, unsigned len,
-			     cpumask_t *new_mask)
-{
-}*/
 
 /**
  * sys_sched_setaffinity - set the cpu affinity of a process
@@ -635,6 +606,7 @@ long sched_setaffinity(pid_t pid, cpumask_t new_mask)
 asmlinkage long sys_sched_setaffinity(pid_t pid, unsigned int len,
 				      unsigned long __user *user_mask_ptr)
 {
+/* implement me! */
 }
 
 /*
@@ -658,6 +630,7 @@ EXPORT_SYMBOL(cpu_possible_map);
 
 long sched_getaffinity(pid_t pid, cpumask_t *mask)
 {
+/* implement me! */
 }
 
 /**
@@ -669,6 +642,7 @@ long sched_getaffinity(pid_t pid, cpumask_t *mask)
 asmlinkage long sys_sched_getaffinity(pid_t pid, unsigned int len,
 				      unsigned long __user *user_mask_ptr)
 {
+/* implement me! */
 }
 
 /**
@@ -680,11 +654,13 @@ asmlinkage long sys_sched_getaffinity(pid_t pid, unsigned int len,
  */
 asmlinkage long sys_sched_yield(void)
 {
+/* implement me! */
 }
 
 
 int __sched cond_resched(void)
 {
+/* implement me! */
 }
 
 EXPORT_SYMBOL(cond_resched);
@@ -699,12 +675,14 @@ EXPORT_SYMBOL(cond_resched);
  */
 int cond_resched_lock(spinlock_t *lock)
 {
+/* implement me! */
 }
 
 EXPORT_SYMBOL(cond_resched_lock);
 
 int __sched cond_resched_softirq(void)
 {
+/* implement me! */
 }
 
 EXPORT_SYMBOL(cond_resched_softirq);
@@ -718,6 +696,7 @@ EXPORT_SYMBOL(cond_resched_softirq);
  */
 void __sched yield(void)
 {
+/* implement me! */
 }
 
 EXPORT_SYMBOL(yield);
@@ -731,12 +710,14 @@ EXPORT_SYMBOL(yield);
  */
 void __sched io_schedule(void)
 {
+/* implement me! */
 }
 
 EXPORT_SYMBOL(io_schedule);
 
 long __sched io_schedule_timeout(long timeout)
 {
+/* implement me! */
 }
 
 /**
@@ -748,6 +729,7 @@ long __sched io_schedule_timeout(long timeout)
  */
 asmlinkage long sys_sched_get_priority_max(int policy)
 {
+/* implement me! */
 }
 
 /**
@@ -759,6 +741,7 @@ asmlinkage long sys_sched_get_priority_max(int policy)
  */
 asmlinkage long sys_sched_get_priority_min(int policy)
 {
+/* implement me! */
 }
 
 /**
@@ -772,6 +755,7 @@ asmlinkage long sys_sched_get_priority_min(int policy)
 asmlinkage
 long sys_sched_rr_get_interval(pid_t pid, struct timespec __user *interval)
 {
+/* implement me! */
 }
 
 /*
@@ -811,11 +795,13 @@ cpumask_t nohz_cpu_mask = CPU_MASK_NONE;
 */
 int set_cpus_allowed(struct task_struct *p, cpumask_t new_mask)
 {
+/* implement me to support SMP! */
 }
 EXPORT_SYMBOL_GPL(set_cpus_allowed);
 
 int __init migration_init(void)
 {
+/* implement me to support SMP! */
 }
 #endif
 
@@ -823,10 +809,7 @@ unsigned int max_cache_size;
 
 void show_state_filter(unsigned long state_filter)
 {
-}
-
-void show_state(void)
-{
+/* implement me! */
 }
 
 /**
@@ -837,33 +820,37 @@ void show_state(void)
  * NOTE: this function does not set the idle thread's NEED_RESCHED
  * flag, to make booting more robust.
  */
-void __devinit init_idle(task_t *idle, int cpu)
+void __cpuinit init_idle(struct task_struct *idle, int cpu)
 {
+/* implement me! */
 }
 
 #ifdef CONFIG_SMP
 void __init sched_init_smp(void)
 {
-/* blablabla */
+/* put stuff here to support SMP! */
 }
 #else
-/* empty */
 void __init sched_init_smp(void)
 {
+/* empty */
 }
 #endif /* CONFIG_SMP */
 
 int in_sched_functions(unsigned long addr)
 {
+/* put stuff here */
 }
 
 void __init sched_init(void)
 {
+/* put stuff here */
 }
 
 #ifdef CONFIG_DEBUG_SPINLOCK_SLEEP
 void __might_sleep(char * file, int line)
 {
+/* put stuff here to support DEBUG_SPINLOCK_SLEEP */
 }
 EXPORT_SYMBOL(__might_sleep);
 #endif
@@ -871,6 +858,7 @@ EXPORT_SYMBOL(__might_sleep);
 #ifdef CONFIG_MAGIC_SYSRQ
 void normalize_rt_tasks(void)
 {
+/* put stuff here to support magic SYSRQs */
 }
 #endif /* CONFIG_MAGIC_SYSRQ */
 
