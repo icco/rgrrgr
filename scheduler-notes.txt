@@ -6,6 +6,8 @@
  * TLDP Page on the subject : http://tldp.org/HOWTO/Benchmarking-HOWTO.html
  * A running of Hack Bench on CFS
    * http://kerneltrap.org/Linux/Additional_CFS_Benchmarks
+ * a decent "interactivity" benchmark
+   * http://users.on.net/~ckolivas/interbench/
 
 ---- Schedulers:
  * Archive of staircase Deadline scheduler (SD/RSDL) never integrated to mainline, superceded by CFS:
