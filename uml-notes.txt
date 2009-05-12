@@ -30,6 +30,7 @@ $ su
 #    # the previous command "chroots" you inside the etch directory,
 #    # meaning that you are effectively running Debian Etch
 # cd ~
+# aptitude update # not doing this is a bad idea :)
 # aptitude install build-essential libncurses5-dev zlib1g-dev
 # wget http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.22.tar.bz2
 
