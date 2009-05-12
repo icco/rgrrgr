@@ -213,27 +213,65 @@ void sched_exec(void)
  */
 unsigned long nr_running(void)
 {
-	/* implement me! */
+	unsigned long i, sum = 0;
+
+	for_each_online_cpu(i)
+		sum += cpu_rq(i)->nr_running;
+
+	return sum;
 }
 
 unsigned long nr_uninterruptible(void)
 {
-	/* implement me! */
+	unsigned long i, sum = 0;
+
+	for_each_possible_cpu(i)
+		sum += cpu_rq(i)->nr_uninterruptible;
+
+	/*
+	 * Since we read the counters lockless, it might be slightly
+	 * inaccurate. Do not allow it to go below zero though:
+	 */
+	if (unlikely((long)sum < 0))
+		sum = 0;
+
+	return sum;
 }
 
 unsigned long long nr_context_switches(void)
 {
-	/* implement me! */
+	int i;
+	unsigned long long sum = 0;
+
+	for_each_possible_cpu(i)
+		sum += cpu_rq(i)->nr_switches;
+
+	return sum;
 }
 
 unsigned long nr_iowait(void)
 {
-	/* implement me! */
+	unsigned long i, sum = 0;
+
+	for_each_possible_cpu(i)
+		sum += atomic_read(&cpu_rq(i)->nr_iowait);
+
+	return sum;
 }
 
 unsigned long nr_active(void)
 {
-	/* implement me! */
+	unsigned long i, running = 0, uninterruptible = 0;
+
+	for_each_online_cpu(i) {
+		running += cpu_rq(i)->nr_running;
+		uninterruptible += cpu_rq(i)->nr_uninterruptible;
+	}
+
+	if (unlikely((long)uninterruptible < 0))
+		uninterruptible = 0;
+
+	return running + uninterruptible;
 }
 
 #ifdef CONFIG_SMP
