@@ -26,7 +26,9 @@ The linked discussion referenced being able to build successfully under Etch, so
 $ su
 # aptitude install debootstrap
 # debootstrap etch ./etch http://ftp.debian.org # or your mirror of choice
-# chroot ./etch # you are now inside the chroot environment, effectively running Etch
+# chroot etch /usr/bin/env -i HOME=/root /bin/bash --login
+#    # the previous command "chroots" you inside the etch directory,
+#    # meaning that you are effectively running Debian Etch
 # cd ~
 # aptitude update # not doing this is a bad idea :)
 # aptitude install build-essential libncurses5-dev zlib1g-dev
