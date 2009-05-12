@@ -732,10 +732,12 @@ static void enqueue_task(struct task_struct *p, struct prio_array *array)
 /*
  * Put task to the end of the run list without the overhead of dequeue
  * followed by enqueue.
+ * TODO: oooo This is good.
  */
 static void requeue_task(struct task_struct *p, struct prio_array *array)
 {
 	list_move_tail(&p->run_list, array->queue + p->prio);
+	//t->block_count -= 1;
 }
 
 static inline void
@@ -1049,6 +1051,8 @@ static void deactivate_task(struct task_struct *p, struct rq *rq)
  * On UP this means the setting of the need_resched flag, on SMP it
  * might also involve a cross-CPU call to trigger the scheduler on
  * the target CPU.
+ *
+ * TODO: This is really cool....
  */
 #ifdef CONFIG_SMP
 
@@ -1741,6 +1745,8 @@ void fastcall sched_fork(struct task_struct *p, int clone_flags)
 	}
 	local_irq_enable();
 	put_cpu();
+
+	p->blocked_count = 1;
 }
 
 /*
@@ -3509,6 +3515,8 @@ void scheduler_tick(void)
 
 	if (!idle_at_tick)
 		task_running_tick(rq, p);
+	else
+		p->blocked_count += 1; // It's idle, increase this...
 #ifdef CONFIG_SMP
 	update_load(rq);
 	rq->idle_at_tick = idle_at_tick;
