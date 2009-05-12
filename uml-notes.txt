@@ -28,6 +28,7 @@ $ su
 # debootstrap etch ./etch http://ftp.debian.org # or your mirror of choice
 # chroot ./etch # you are now inside the chroot environment, effectively running Etch
 # cd ~
+# aptitude update # not doing this is a bad idea :)
 # aptitude install build-essential libncurses5-dev zlib1g-dev
 # wget http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.22.tar.bz2
 
