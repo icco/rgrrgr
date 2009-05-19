@@ -1076,6 +1076,9 @@ struct task_struct {
 #ifdef CONFIG_FAULT_INJECTION
 	int make_it_fail;
 #endif
+
+	/* For storing rgrrgr's "# of times blocked" */
+	int blocked_count;
 };
 
 static inline pid_t process_group(struct task_struct *tsk)
