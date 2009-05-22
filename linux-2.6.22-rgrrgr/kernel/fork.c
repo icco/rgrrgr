@@ -1042,7 +1042,7 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	p->stime = cputime_zero;
  	p->sched_time = 0;
 
-	p->block_count = 1; /* for rgrrgr */
+	p->blocked_count = 42; /* for rgrrgr */
 #ifdef CONFIG_TASK_XACCT
 	p->rchar = 0;		/* I/O counter: bytes read */
 	p->wchar = 0;		/* I/O counter: bytes written */
