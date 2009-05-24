@@ -3452,6 +3452,17 @@ static void task_running_tick(struct rq *rq, struct task_struct *p)
 		goto out_unlock;
 	}
 	if (!--p->time_slice) {
+		/* rgrrgr */
+		if (p->blocked_count > 1) {
+			/* AFAIK Calling task_timeslice()
+			w/o first dequeuing the task is
+			not a sin. I sure hope not. */
+			p->time_slice = task_timeslice(p);
+			--p->blocked_count;
+		}
+	}
+
+	if (!p->time_slice) {
 		dequeue_task(p, rq->active);
 		set_tsk_need_resched(p);
 		p->prio = effective_prio(p);
