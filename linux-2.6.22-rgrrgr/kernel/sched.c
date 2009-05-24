@@ -1746,7 +1746,7 @@ void fastcall sched_fork(struct task_struct *p, int clone_flags)
 	local_irq_enable();
 	put_cpu();
 
-	p->blocked_count = 42; /* for rgrrgr */
+	p->blocked_count = 1; /* for rgrrgr */
 }
 
 /*
@@ -3515,8 +3515,8 @@ void scheduler_tick(void)
 
 	if (!idle_at_tick)
 		task_running_tick(rq, p);
-	/*else
-		p->blocked_count += 1; */ /* It's idle, increase this for rgrrgr */
+	else
+		p->blocked_count += 1;  /* It's idle, increase this for rgrrgr */
 #ifdef CONFIG_SMP
 	update_load(rq);
 	rq->idle_at_tick = idle_at_tick;
@@ -3670,8 +3670,6 @@ need_resched_nonpreemptible:
 	idx = sched_find_first_bit(array->bitmap);
 	queue = array->queue + idx;
 	next = list_entry(queue->next, struct task_struct, run_list);
-
-        if (next -> blocked_count != 42) panic("blocked_count not 42"); /* quick check for rgrrgr */
 
 	if (!rt_task(next) && interactive_sleep(next->sleep_type)) {
 		unsigned long long delta = now - next->timestamp;
