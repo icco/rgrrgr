@@ -25,6 +25,8 @@
    * http://en.wikipedia.org/wiki/Rate-monotonic_scheduling
  * Summary of "Really Fair Scheduler":
    * http://kerneltrap.org/Linux/The_Really_Fair_Scheduler
+ * HP on O(1)
+   * http://www.hpl.hp.com/research/linux/kernel/o1.php
 
 
 ---- Random stuff that's relevant:
