@@ -3513,10 +3513,12 @@ void scheduler_tick(void)
 
 	update_cpu_clock(p, rq, now);
 
-	if (!idle_at_tick)
+	if (!idle_at_tick) {
+		p->blocked_count -= p->blocked_count ? 1 : 0;
 		task_running_tick(rq, p);
+	}
 	else
-		p->blocked_count += 1;  /* It's idle, increase this for rgrrgr */
+		p->blocked_count += 1;  // It's idle, increase this for rgrrgr 
 #ifdef CONFIG_SMP
 	update_load(rq);
 	rq->idle_at_tick = idle_at_tick;
