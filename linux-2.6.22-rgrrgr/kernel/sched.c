@@ -111,6 +111,9 @@ unsigned long long __attribute__((weak)) sched_clock(void)
 #define STARVATION_LIMIT	(MAX_SLEEP_AVG)
 #define NS_MAX_SLEEP_AVG	(JIFFIES_TO_NS(MAX_SLEEP_AVG))
 
+/* For rgrrgr */
+#define BLOCKED_CEILING 20
+
 /*
  * If a task is 'interactive' then we reinsert it in the active
  * array after it has expired its current timeslice. (it will not
@@ -3525,10 +3528,10 @@ void scheduler_tick(void)
 	update_cpu_clock(p, rq, now);
 
 	if (!idle_at_tick) {
-		p->blocked_count -= p->blocked_count ? 1 : 0;
+		//p->blocked_count -= p->blocked_count ? 1 : 0;
 		task_running_tick(rq, p);
 	}
-	else
+	else if (p-> blocked_count < BLOCKED_CEILING)
 		p->blocked_count += 1;  // It's idle, increase this for rgrrgr 
 #ifdef CONFIG_SMP
 	update_load(rq);
