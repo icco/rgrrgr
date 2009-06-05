@@ -1746,10 +1746,10 @@ void fastcall sched_fork(struct task_struct *p, int clone_flags)
 		current->time_slice = 1;
 		task_running_tick(cpu_rq(cpu), current);
 	}
+	p->blocked_count = 1; /* for rgrrgr */
+
 	local_irq_enable();
 	put_cpu();
-
-	p->blocked_count = 1; /* for rgrrgr */
 }
 
 /*
@@ -3454,18 +3454,18 @@ static void task_running_tick(struct rq *rq, struct task_struct *p)
 		}
 		goto out_unlock;
 	}
+	
 	if (!--p->time_slice) {
 		/* rgrrgr */
 		if (p->blocked_count > 1) {
 			/* AFAIK Calling task_timeslice()
-			w/o first dequeuing the task is
-			not a sin. I sure hope not. */
+			   w/o first dequeuing the task is
+			   not a sin. I sure hope not. */
 			p->time_slice = task_timeslice(p);
-			--p->blocked_count;
+			p->first_time_slice = 0;
+			p->blocked_count--;
+			goto out_unlock;
 		}
-	}
-
-	if (!p->time_slice) {
 		dequeue_task(p, rq->active);
 		set_tsk_need_resched(p);
 		p->prio = effective_prio(p);
@@ -3524,15 +3524,22 @@ void scheduler_tick(void)
 	int cpu = smp_processor_id();
 	int idle_at_tick = idle_cpu(cpu);
 	struct rq *rq = cpu_rq(cpu);
-
+	
 	update_cpu_clock(p, rq, now);
 
 	if (!idle_at_tick) {
 		//p->blocked_count -= p->blocked_count ? 1 : 0;
 		task_running_tick(rq, p);
 	}
-	else if (p-> blocked_count < BLOCKED_CEILING)
-		p->blocked_count += 1;  // It's idle, increase this for rgrrgr 
+	else 
+	{
+		spin_lock(&rq->lock);
+		if (p-> blocked_count < BLOCKED_CEILING)
+		{		
+			p->blocked_count++;  // It's idle, increase this for rgrrgr
+		}
+		spin_unlock(&rq->lock);
+	}
 #ifdef CONFIG_SMP
 	update_load(rq);
 	rq->idle_at_tick = idle_at_tick;
